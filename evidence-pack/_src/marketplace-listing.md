@@ -22,7 +22,12 @@ ISO/IEC 27001:2022 A 8.32, SOC 2 CC8.1, DORA Art. 9(4)(e) and NIS2 Art. 21(2)(e)
 
 **More details:**
 - Runs entirely on Atlassian Forge. No external servers, no data egress.
+- Jira Service Management approval steps count as approvals.
+- "At risk now": open changes in progress without a valid approval.
+- Emergency label timing: adding the label after the fact doesn't excuse a late approval.
 - Monthly packs built automatically for the previous month.
+- You define who counts as the implementer: assignee, past assignees, whoever started the work, whoever moved it after approval, or the reporter.
+- Tamper checks: flags incomplete Jira history, and re-checks saved packs against Jira to catch deleted issues and altered records.
 - Optional check for linked pull requests, commits, deployments or links.
 - Roles: admins configure, Jira groups control who builds packs and who approves.
 - Settings change log and full data export.
@@ -32,7 +37,7 @@ ISO/IEC 27001:2022 A 8.32, SOC 2 CC8.1, DORA Art. 9(4)(e) and NIS2 Art. 21(2)(e)
 - Does the app store data outside Atlassian? No. All data is stored in Forge hosted storage.
 - Does the app egress data? No.
 - Does the app process personal data? It reads Jira user names and account ids from issue history and stores approver account ids and names in Forge storage. It reports stored account ids to Atlassian's personal data reporting API weekly and erases closed accounts.
-- Scopes: read:jira-work (read issues and history), read:jira-user (names and groups), write:jira-work (comment and optional transition on approval), storage:app (settings, packs, approvals).
+- Scopes: read:jira-work (read issues and history), read:jira-user (names and groups), write:jira-work (comment and optional transition on approval), storage:app (settings, packs, approvals), read:servicedesk-request (Jira Service Management approval steps, only when enabled).
 
 ## Deutsch
 
@@ -54,7 +59,12 @@ ISO/IEC 27001:2022 A 8.32, SOC 2 CC8.1, DORA Art. 9 Abs. 4 lit. e und NIS2 Art. 
 
 **Weitere Details:**
 - Läuft vollständig auf Atlassian Forge. Keine externen Server, kein Datenabfluss.
+- Genehmigungsschritte aus Jira Service Management zählen als Freigabe.
+- „Jetzt gefährdet“: laufende Änderungen ohne gültige Freigabe.
+- Notfall-Label mit Zeitprüfung: ein nachträglich gesetztes Label entschuldigt keine verspätete Freigabe.
 - Monatliche Nachweise für den Vormonat werden automatisch erstellt.
+- Sie legen fest, wer als umsetzend gilt: zugewiesene Person, frühere Zuweisungen, wer mit der Arbeit begann, wer den Vorgang nach der Freigabe bewegt hat, oder die meldende Person.
+- Manipulationsprüfung: erkennt unvollständige Jira-Verläufe und gleicht gespeicherte Nachweise mit Jira ab, um gelöschte Vorgänge und geänderte Datensätze zu finden.
 - Optionale Prüfung auf verknüpfte Pull Requests, Commits, Deployments oder Links.
 - Rollen: Admins konfigurieren, Jira-Gruppen steuern, wer Nachweise erstellt und wer freigibt.
 - Änderungsprotokoll der Einstellungen und vollständiger Datenexport.

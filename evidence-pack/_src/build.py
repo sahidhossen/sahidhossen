@@ -30,7 +30,7 @@ def page(slug: str, title: str, body: str, lang: str = "en", desc: str = "") -> 
     nav = []
     for group, items in NAV:
         links = "".join(
-            f'<a href="{href}"{" aria-current=\"page\"" if href == slug else ""}>{escape(label)}</a>' for href, label in items
+            '<a href="{}"{}>{}</a>'.format(href, ' aria-current="page"' if href == slug else '', escape(label)) for href, label in items
         )
         nav.append(f"<h2>{escape(group)}</h2>{links}")
     other = '<a href="datenschutz.html">Datenschutzerklärung (Deutsch)</a>' if lang == "en" else '<a href="privacy.html">Privacy policy (English)</a>'
@@ -99,8 +99,12 @@ page("index.html", "Overview", f"""
 <h2>What you get</h2>
 <ul>
 <li><strong>Evidence packs.</strong> Pick changes with JQL and a period, test all of them or a random sample, and download a PDF and CSV with a SHA-256 fingerprint.</li>
+<li><strong>You define who did the change.</strong> The assignee, anyone who was ever assigned, whoever started the work, whoever moved it after approval, or the reporter. Pick what your change policy says.</li>
+<li><strong>Tamper checks.</strong> Every change is checked for gaps and inconsistencies in its Jira history, and any saved pack can be re-checked against Jira later to catch deleted issues or altered records.</li>
 <li><strong>Approval in the ticket.</strong> Approvers approve or reject right on the Jira issue. Each decision is chained to the previous one, so later edits show up.</li>
-<li><strong>Emergency changes.</strong> Changes with an emergency label may be approved within a window after work starts, as most change policies allow.</li>
+<li><strong>Emergency changes.</strong> Changes with an emergency label may be approved within a window after work starts, as most change policies allow. Adding the label after the fact doesn't count, and the Overview shows how often emergencies are used.</li>
+<li><strong>Jira Service Management approvals.</strong> Approval steps on service requests count as approvals, next to statuses and the ticket panel.</li>
+<li><strong>At risk now.</strong> The Overview lists open changes that are already in progress without a valid approval, so teams fix them before they become audit findings.</li>
 <li><strong>Code evidence.</strong> Optionally require a linked pull request, commit, deployment or link for every change.</li>
 <li><strong>Control mapping.</strong> ISO/IEC 27001:2022 A 8.32, SOC 2 CC8.1, DORA Art. 9(4)(e) and NIS2 Art. 21(2)(e).</li>
 <li><strong>A 12-month trend.</strong> See how often changes miss the rules and what the most common causes are.</li>
@@ -144,26 +148,67 @@ page("checks.html", "How the checks work", """
 <li><strong>Evidence Pack approval.</strong> An approver clicked <em>Approve change</em> on the issue. The decision is recorded with the approver, time, note and the status at that moment.</li>
 <li><strong>Either.</strong> The earliest of the two counts.</li>
 </ul>
+<p>On top of that, an admin can also count <strong>Jira Service Management approvals</strong>. A service request's approval step counts as approval once it reaches its final decision <em>Approved</em>, at the time it was completed. Declined and pending steps never count. When several people approved a step, the segregation check passes if at least one of them is not the implementer.</p>
 <p>A later rejection in Evidence Pack revokes an earlier approval made there.</p>
 <h2>The checks</h2>
 <table>
 <thead><tr><th>Check</th><th>Passes when</th></tr></thead>
 <tbody>
 <tr><td>Approval recorded</td><td>An approval exists, as defined above.</td></tr>
-<tr><td>Approved before implementation</td><td>The approval happened before the change first moved into an implementation status. For changes with the emergency label, approval may follow within the configured window (48 hours by default).</td></tr>
-<tr><td>Approver is not the implementer</td><td>The approver did not move the change into an implementation status and is not its assignee.</td></tr>
+<tr><td>Approved before implementation</td><td>The approval happened before the change first moved into an implementation status. For changes with the emergency label, approval may follow within the configured window (48 hours by default), but only if the label was added before the approval and before the change was completed.</td></tr>
+<tr><td>Approver is not the implementer</td><td>The approver is none of the people your admin defined as the implementer. See <a href="#who-did-the-change">Who did the change</a>.</td></tr>
+<tr><td>History intact</td><td>The issue's Jira history is complete and consistent, and Evidence Pack's own approval records still match their hashes. See <a href="#altered-or-missing-history">Altered or missing history</a>.</td></tr>
 <tr><td>Code change linked (optional)</td><td>The issue has a linked pull request, commit, deployment, or a link to one.</td></tr>
 </tbody>
 </table>
-<p>A change is an exception when any check fails. When there is no approval at all, the pack lists only that root cause, not the checks that fail as a consequence.</p>
+<p>A change is an exception when any check fails. When there is no approval at all, the pack lists only that root cause (plus any history problem), not the checks that fail as a consequence.</p>
+<h2>Emergency changes</h2>
+<p>Most change policies let an emergency fix go ahead and be approved shortly after. Evidence Pack supports this with an emergency label and a window. To stop the window being used to excuse a missed approval after the fact, it reads when the label was added from the issue history. If the label was added after the approval, or after the change was completed, the window does not apply and the change is an exception. If the label was removed and added again, the last addition counts.</p>
+<p>The Overview shows the share of emergency changes per month. A high share is a finding in itself, because it suggests the normal process is being bypassed.</p>
+<h2>Who did the change</h2>
+<p>"The person who did it" means different things in different teams, so an admin decides. The approver fails the check if they match any of the ticked definitions, and the definitions are printed in every pack.</p>
+<table>
+<thead><tr><th>Definition</th><th>Matches</th></tr></thead>
+<tbody>
+<tr><td>Current assignee <em>(default)</em></td><td>Whoever is assigned when the pack is built.</td></tr>
+<tr><td>Anyone who was ever assigned</td><td>Every person the issue was assigned to at any time, from the assignee history. Catches changes reassigned around the approval.</td></tr>
+<tr><td>Whoever moved it into an implementation status <em>(default)</em></td><td>The person who started the work in Jira.</td></tr>
+<tr><td>Whoever moved it after approval</td><td>Anyone who changed the status after the approval. The strictest option: the approver may not even close the change.</td></tr>
+<tr><td>The reporter</td><td>The person who raised the change.</td></tr>
+</tbody>
+</table>
+<p>Pull request and commit authors are not part of Jira's data, so Evidence Pack cannot compare them. If your policy defines the implementer as the code author, use <em>Whoever moved it into an implementation status</em> together with a team rule that developers move their own tickets, and keep your Git platform's branch protection (required reviews) as the code-side evidence.</p>
+<h2>Altered or missing history</h2>
+<p>Nobody, including Jira admins, can edit or delete individual entries in Jira's issue history. What can happen is that history is missing or incomplete: an issue is deleted, imported from another tool without its history, moved through a workflow migration, or created already in a done status. Evidence Pack looks for these signs on every change, and the <em>History intact</em> check fails when it finds one:</p>
+<ul>
+<li>The change is completed but has no recorded status change at all.</li>
+<li>The status history has a gap: one entry ends in a status, and the next one starts from a different one. Statuses are compared by id, so renaming a status does not trigger this.</li>
+<li>The current status is not where the history ends.</li>
+<li>A status change or approval is dated before the issue was created.</li>
+<li>Evidence Pack's own approval records for the issue no longer match their SHA-256 hash chain.</li>
+</ul>
+<h3>Re-check a saved pack against Jira</h3>
+<p>Deleting a ticket after a pack is built removes it from Jira, but not from the pack. Open any pack and click <em>Re-check now</em> to compare it with Jira today. It reports:</p>
+<ul>
+<li>changes that were deleted or are no longer visible,</li>
+<li>status history entries recorded in the pack that are no longer in Jira,</li>
+<li>status history entries dated before the pack was built that appeared afterwards,</li>
+<li>approval records that differ from the ones in the pack,</li>
+<li>changes that moved to another project key (for information),</li>
+<li>whether the population query finds fewer changes today than when the pack was built.</li>
+</ul>
+<p>History added after the pack was built, for example a reopened ticket, is normal and is not reported. We recommend running a re-check right before handing a pack to an auditor.</p>
+<p class="note">Evidence Pack cannot stop a Jira admin from deleting issues. It makes sure that when it happens, it is visible. Limiting who can delete issues in your Jira permission schemes is the preventive control.</p>
 <h2>Where the data comes from</h2>
 <p>All facts come from Jira's own issue history (the changelog) and from Evidence Pack's approval records. Nothing is typed in by hand, and nothing is taken from screenshots.</p>
 <h2>Integrity</h2>
 <ul>
 <li>Every pack carries a SHA-256 fingerprint computed from the query, the seed, the settings, and every tested change with its history and results.</li>
 <li>Every pack is stored in the app and can be re-downloaded later. The app never edits or deletes stored packs.</li>
-<li>Each approval decision is chained to the previous decision on the same issue with SHA-256. If a stored decision is changed, the issue shows <em>Integrity broken</em>.</li>
-<li>Every change to the app's settings is logged with who made it and the old and new values.</li>
+<li>Each approval decision is chained to the previous decision on the same issue with SHA-256. If a stored decision is changed, the issue shows <em>Integrity broken</em> and fails the <em>History intact</em> check in every pack.</li>
+<li>Any saved pack can be <a href="#altered-or-missing-history">re-checked against Jira</a> to catch deleted issues and altered records.</li>
+<li>Every change to the app's settings is logged with who made it and the old and new values. Each entry is chained to the previous one with SHA-256, so an edited, removed or reordered entry shows up as <em>Integrity broken</em>.</li>
+<li>Every pack includes the settings changes made from the start of its period until it was built, and whether the log passed its integrity check at that moment. Auditors can see whether the rules changed during the period.</li>
 </ul>
 <h2>Control mapping</h2>
 <p>The PDF maps the checks to the frameworks you select. The mapping is guidance; the auditor decides whether the evidence is sufficient for a control.</p>
@@ -193,7 +238,7 @@ page("approvals.html", "Approving changes", """
 </ul>
 <p>Every decision also adds a comment to the issue, so the team sees it.</p>
 <h2>Who can approve</h2>
-<p>By default anyone who can see the issue can approve, except its assignee. Admins can limit approval to Jira groups such as a change advisory board in <a href="settings.html#access">Settings</a>.</p>
+<p>By default anyone who can see the issue can approve, except the people your admin defined as <a href="checks.html#who-did-the-change">the implementer</a>, for example the assignee or the person who started the work. Admins can limit approval to Jira groups such as a change advisory board in <a href="settings.html#access">Settings</a>.</p>
 <h2>The decision record</h2>
 <p>The panel lists every decision on the issue. <em>Integrity verified</em> means each decision still matches the chain of SHA-256 hashes created when it was recorded.</p>
 """)
@@ -211,12 +256,15 @@ page("settings.html", "Settings", """
 <tr><td>Approval statuses</td><td>Moving a change into one of these counts as approval.</td></tr>
 <tr><td>Implementation statuses</td><td>Moving a change into one of these means work started. It must happen after approval, by someone else.</td></tr>
 <tr><td>Emergency label and window</td><td>Changes with this label may be approved within the window after work starts.</td></tr>
-<tr><td>Require code evidence</td><td>Adds a fourth check for a linked pull request, commit, deployment or link.</td></tr>
-<tr><td>Block self-approval</td><td>Stops an assignee from approving their own change in the panel.</td></tr>
+<tr><td>Who counts as the person who did the change</td><td>One or more of: current assignee, anyone who was ever assigned, whoever moved it into an implementation status, whoever moved it after approval, the reporter. See <a href="checks.html#who-did-the-change">Who did the change</a>.</td></tr>
+<tr><td>Require code evidence</td><td>Adds a check for a linked pull request, commit, deployment or link.</td></tr>
+<tr><td>Also count Jira Service Management approvals</td><td>Approval steps on service requests count as approvals. See <a href="checks.html#what-counts-as-approval">How the checks work</a>.</td></tr>
+<tr><td>Block self-approval</td><td>Stops the people defined above from approving their own change in the panel. "Moved it after approval" can only be known later, so it is checked in packs.</td></tr>
 <tr><td>Move ticket on approval</td><td>Moves the issue to the first approval status when approved in the panel.</td></tr>
 </tbody>
 </table>
 <h2 id="access">Access</h2>
+<p>The <em>Change log</em> at the bottom of Settings shows <em>Integrity verified</em> while every entry still matches its hash chain.</p>
 <p><em>Who can build packs</em> and <em>Who can approve changes</em> take Jira groups. Leave them empty to allow everyone. Jira admins always can.</p>
 <h2 id="schedules">Monthly packs</h2>
 <p>Add a schedule with a name, JQL and sample size. On the first day of each month, a pack for the previous calendar month is built and stored in History. <em>Run now</em> builds last month's pack immediately.</p>
@@ -238,12 +286,21 @@ page("faq.html", "FAQ", """
 <tr><td>Read Jira users</td><td>Show who approved and who implemented, and check group membership.</td></tr>
 <tr><td>Write Jira work</td><td>Add a comment and optionally move the issue when someone approves in the panel.</td></tr>
 <tr><td>App storage</td><td>Store settings, packs and approval records inside your site.</td></tr>
+<tr><td>Read service requests</td><td>Read approval steps on Jira Service Management requests. Only used when that setting is on.</td></tr>
 </tbody>
 </table>
 <h3>Whose permissions are used to read issues?</h3>
 <p>Packs you build in the app read issues as you, so you only see what you can see in Jira. Background and monthly packs run as the app.</p>
 <h3>How large can a pack be?</h3>
-<p>Up to 2,000 changes. Packs with more than 100 changes are built in the background; you can leave the page and open the result from History.</p>
+<p>Up to 2,000 changes. Packs with more than 100 changes are built in the background, 25 changes at a time, so no step comes near Forge's time limits. You can leave the page and open the result from History.</p>
+<h3>What is "At risk now" on the Overview?</h3>
+<p>Open changes in your query that are already in an implementation status but have no valid approval, or were approved by the implementer. Emergency changes still inside their window show the deadline instead. It checks up to the 100 most recently updated changes in progress, using your own Jira permissions.</p>
+<h3>Can it build a PDF for 2,000 changes?</h3>
+<p>Yes. The PDF is built in your browser, not on a server, so Forge's time and size limits don't apply to it. A 2,000-change pack takes a few seconds. Above 300 changes the appendix lists the history of exceptions and emergency changes only, to keep the PDF readable; the CSV always contains the full history of every change.</p>
+<h3>Can a Jira admin alter a ticket's history to hide a problem?</h3>
+<p>Jira does not let anyone edit or delete individual history entries. An admin can delete a whole issue, and history can be missing after imports or migrations. Evidence Pack flags incomplete history on every change and can <a href="checks.html#altered-or-missing-history">re-check a saved pack</a> against Jira to show deleted issues and altered records.</p>
+<h3>Who counts as the person who did the change?</h3>
+<p>Your admin decides: the assignee, anyone who was ever assigned, whoever started the work, whoever moved it after approval, or the reporter. See <a href="checks.html#who-did-the-change">Who did the change</a>.</p>
 <h3>Does it work with team-managed and company-managed projects?</h3>
 <p>Yes. It only relies on statuses and issue history, which both project types have.</p>
 <h3>Can I change a pack after it is generated?</h3>
@@ -280,7 +337,7 @@ PRIVACY_EN = f"""
 <h2>Roles</h2>
 <p>Your organisation is the controller of the data in its Jira site. Atlassian hosts and runs the app on its infrastructure as part of Forge, under Atlassian's own privacy policy and data processing terms. Because no data reaches us, we do not process your personal data when the app runs.</p>
 <h2>What the app reads</h2>
-<p>To build packs and show approval status, the app reads from Jira: issue keys, summaries, types, labels, assignees, status history (including who made each status change and when), development summaries and links. It reads Jira user names and group memberships to show who approved and to apply your access settings.</p>
+<p>To build packs and show approval status, the app reads from Jira: issue keys, summaries, types, labels, reporters, assignees, the history of statuses, assignees and labels (including who made each change and when), development summaries and links. If you turn on Jira Service Management approvals, it also reads the approval steps of service requests, including who approved or declined. It reads Jira user names and group memberships to show who approved and to apply your access settings.</p>
 <h2>What the app stores</h2>
 <table>
 <thead><tr><th>Data</th><th>Personal data in it</th></tr></thead>
@@ -319,7 +376,7 @@ PRIVACY_DE = f"""
 <h2>Rollen</h2>
 <p>Ihre Organisation ist Verantwortliche für die Daten in ihrer Jira-Site. Atlassian betreibt die App im Rahmen von Forge auf eigener Infrastruktur, nach den Datenschutz- und Auftragsverarbeitungsbedingungen von Atlassian. Da keine Daten zu uns gelangen, verarbeiten wir beim Betrieb der App keine personenbezogenen Daten.</p>
 <h2>Was die App liest</h2>
-<p>Für Nachweise und den Freigabestatus liest die App aus Jira: Vorgangsschlüssel, Zusammenfassungen, Typen, Labels, Bearbeitende, den Statusverlauf (einschließlich wer wann welchen Status gesetzt hat), Entwicklungszusammenfassungen und Links. Sie liest Namen von Jira-Benutzern und Gruppenmitgliedschaften, um Freigebende anzuzeigen und Ihre Zugriffseinstellungen anzuwenden.</p>
+<p>Für Nachweise und den Freigabestatus liest die App aus Jira: Vorgangsschlüssel, Zusammenfassungen, Typen, Labels, meldende und bearbeitende Personen, den Verlauf von Status, Zuweisungen und Labels (einschließlich wer wann was geändert hat), Entwicklungszusammenfassungen und Links. Wenn Sie Freigaben aus Jira Service Management aktivieren, liest sie auch die Genehmigungsschritte von Serviceanfragen, einschließlich wer zugestimmt oder abgelehnt hat. Sie liest Namen von Jira-Benutzern und Gruppenmitgliedschaften, um Freigebende anzuzeigen und Ihre Zugriffseinstellungen anzuwenden.</p>
 <h2>Was die App speichert</h2>
 <table>
 <thead><tr><th>Daten</th><th>Enthaltene personenbezogene Daten</th></tr></thead>

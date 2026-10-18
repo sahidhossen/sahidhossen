@@ -33,12 +33,21 @@
 <tr><td>Read Jira users</td><td>Show who approved and who implemented, and check group membership.</td></tr>
 <tr><td>Write Jira work</td><td>Add a comment and optionally move the issue when someone approves in the panel.</td></tr>
 <tr><td>App storage</td><td>Store settings, packs and approval records inside your site.</td></tr>
+<tr><td>Read service requests</td><td>Read approval steps on Jira Service Management requests. Only used when that setting is on.</td></tr>
 </tbody>
 </table>
 <h3>Whose permissions are used to read issues?</h3>
 <p>Packs you build in the app read issues as you, so you only see what you can see in Jira. Background and monthly packs run as the app.</p>
 <h3>How large can a pack be?</h3>
-<p>Up to 2,000 changes. Packs with more than 100 changes are built in the background; you can leave the page and open the result from History.</p>
+<p>Up to 2,000 changes. Packs with more than 100 changes are built in the background, 25 changes at a time, so no step comes near Forge's time limits. You can leave the page and open the result from History.</p>
+<h3>What is "At risk now" on the Overview?</h3>
+<p>Open changes in your query that are already in an implementation status but have no valid approval, or were approved by the implementer. Emergency changes still inside their window show the deadline instead. It checks up to the 100 most recently updated changes in progress, using your own Jira permissions.</p>
+<h3>Can it build a PDF for 2,000 changes?</h3>
+<p>Yes. The PDF is built in your browser, not on a server, so Forge's time and size limits don't apply to it. A 2,000-change pack takes a few seconds. Above 300 changes the appendix lists the history of exceptions and emergency changes only, to keep the PDF readable; the CSV always contains the full history of every change.</p>
+<h3>Can a Jira admin alter a ticket's history to hide a problem?</h3>
+<p>Jira does not let anyone edit or delete individual history entries. An admin can delete a whole issue, and history can be missing after imports or migrations. Evidence Pack flags incomplete history on every change and can <a href="checks.html#altered-or-missing-history">re-check a saved pack</a> against Jira to show deleted issues and altered records.</p>
+<h3>Who counts as the person who did the change?</h3>
+<p>Your admin decides: the assignee, anyone who was ever assigned, whoever started the work, whoever moved it after approval, or the reporter. See <a href="checks.html#who-did-the-change">Who did the change</a>.</p>
 <h3>Does it work with team-managed and company-managed projects?</h3>
 <p>Yes. It only relies on statuses and issue history, which both project types have.</p>
 <h3>Can I change a pack after it is generated?</h3>

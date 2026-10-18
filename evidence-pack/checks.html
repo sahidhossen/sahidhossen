@@ -33,26 +33,67 @@
 <li><strong>Evidence Pack approval.</strong> An approver clicked <em>Approve change</em> on the issue. The decision is recorded with the approver, time, note and the status at that moment.</li>
 <li><strong>Either.</strong> The earliest of the two counts.</li>
 </ul>
+<p>On top of that, an admin can also count <strong>Jira Service Management approvals</strong>. A service request's approval step counts as approval once it reaches its final decision <em>Approved</em>, at the time it was completed. Declined and pending steps never count. When several people approved a step, the segregation check passes if at least one of them is not the implementer.</p>
 <p>A later rejection in Evidence Pack revokes an earlier approval made there.</p>
 <h2 id="the-checks">The checks</h2>
 <table>
 <thead><tr><th>Check</th><th>Passes when</th></tr></thead>
 <tbody>
 <tr><td>Approval recorded</td><td>An approval exists, as defined above.</td></tr>
-<tr><td>Approved before implementation</td><td>The approval happened before the change first moved into an implementation status. For changes with the emergency label, approval may follow within the configured window (48 hours by default).</td></tr>
-<tr><td>Approver is not the implementer</td><td>The approver did not move the change into an implementation status and is not its assignee.</td></tr>
+<tr><td>Approved before implementation</td><td>The approval happened before the change first moved into an implementation status. For changes with the emergency label, approval may follow within the configured window (48 hours by default), but only if the label was added before the approval and before the change was completed.</td></tr>
+<tr><td>Approver is not the implementer</td><td>The approver is none of the people your admin defined as the implementer. See <a href="#who-did-the-change">Who did the change</a>.</td></tr>
+<tr><td>History intact</td><td>The issue's Jira history is complete and consistent, and Evidence Pack's own approval records still match their hashes. See <a href="#altered-or-missing-history">Altered or missing history</a>.</td></tr>
 <tr><td>Code change linked (optional)</td><td>The issue has a linked pull request, commit, deployment, or a link to one.</td></tr>
 </tbody>
 </table>
-<p>A change is an exception when any check fails. When there is no approval at all, the pack lists only that root cause, not the checks that fail as a consequence.</p>
+<p>A change is an exception when any check fails. When there is no approval at all, the pack lists only that root cause (plus any history problem), not the checks that fail as a consequence.</p>
+<h2 id="emergency-changes">Emergency changes</h2>
+<p>Most change policies let an emergency fix go ahead and be approved shortly after. Evidence Pack supports this with an emergency label and a window. To stop the window being used to excuse a missed approval after the fact, it reads when the label was added from the issue history. If the label was added after the approval, or after the change was completed, the window does not apply and the change is an exception. If the label was removed and added again, the last addition counts.</p>
+<p>The Overview shows the share of emergency changes per month. A high share is a finding in itself, because it suggests the normal process is being bypassed.</p>
+<h2 id="who-did-the-change">Who did the change</h2>
+<p>"The person who did it" means different things in different teams, so an admin decides. The approver fails the check if they match any of the ticked definitions, and the definitions are printed in every pack.</p>
+<table>
+<thead><tr><th>Definition</th><th>Matches</th></tr></thead>
+<tbody>
+<tr><td>Current assignee <em>(default)</em></td><td>Whoever is assigned when the pack is built.</td></tr>
+<tr><td>Anyone who was ever assigned</td><td>Every person the issue was assigned to at any time, from the assignee history. Catches changes reassigned around the approval.</td></tr>
+<tr><td>Whoever moved it into an implementation status <em>(default)</em></td><td>The person who started the work in Jira.</td></tr>
+<tr><td>Whoever moved it after approval</td><td>Anyone who changed the status after the approval. The strictest option: the approver may not even close the change.</td></tr>
+<tr><td>The reporter</td><td>The person who raised the change.</td></tr>
+</tbody>
+</table>
+<p>Pull request and commit authors are not part of Jira's data, so Evidence Pack cannot compare them. If your policy defines the implementer as the code author, use <em>Whoever moved it into an implementation status</em> together with a team rule that developers move their own tickets, and keep your Git platform's branch protection (required reviews) as the code-side evidence.</p>
+<h2 id="altered-or-missing-history">Altered or missing history</h2>
+<p>Nobody, including Jira admins, can edit or delete individual entries in Jira's issue history. What can happen is that history is missing or incomplete: an issue is deleted, imported from another tool without its history, moved through a workflow migration, or created already in a done status. Evidence Pack looks for these signs on every change, and the <em>History intact</em> check fails when it finds one:</p>
+<ul>
+<li>The change is completed but has no recorded status change at all.</li>
+<li>The status history has a gap: one entry ends in a status, and the next one starts from a different one. Statuses are compared by id, so renaming a status does not trigger this.</li>
+<li>The current status is not where the history ends.</li>
+<li>A status change or approval is dated before the issue was created.</li>
+<li>Evidence Pack's own approval records for the issue no longer match their SHA-256 hash chain.</li>
+</ul>
+<h3>Re-check a saved pack against Jira</h3>
+<p>Deleting a ticket after a pack is built removes it from Jira, but not from the pack. Open any pack and click <em>Re-check now</em> to compare it with Jira today. It reports:</p>
+<ul>
+<li>changes that were deleted or are no longer visible,</li>
+<li>status history entries recorded in the pack that are no longer in Jira,</li>
+<li>status history entries dated before the pack was built that appeared afterwards,</li>
+<li>approval records that differ from the ones in the pack,</li>
+<li>changes that moved to another project key (for information),</li>
+<li>whether the population query finds fewer changes today than when the pack was built.</li>
+</ul>
+<p>History added after the pack was built, for example a reopened ticket, is normal and is not reported. We recommend running a re-check right before handing a pack to an auditor.</p>
+<p class="note">Evidence Pack cannot stop a Jira admin from deleting issues. It makes sure that when it happens, it is visible. Limiting who can delete issues in your Jira permission schemes is the preventive control.</p>
 <h2 id="where-the-data-comes-from">Where the data comes from</h2>
 <p>All facts come from Jira's own issue history (the changelog) and from Evidence Pack's approval records. Nothing is typed in by hand, and nothing is taken from screenshots.</p>
 <h2 id="integrity">Integrity</h2>
 <ul>
 <li>Every pack carries a SHA-256 fingerprint computed from the query, the seed, the settings, and every tested change with its history and results.</li>
 <li>Every pack is stored in the app and can be re-downloaded later. The app never edits or deletes stored packs.</li>
-<li>Each approval decision is chained to the previous decision on the same issue with SHA-256. If a stored decision is changed, the issue shows <em>Integrity broken</em>.</li>
-<li>Every change to the app's settings is logged with who made it and the old and new values.</li>
+<li>Each approval decision is chained to the previous decision on the same issue with SHA-256. If a stored decision is changed, the issue shows <em>Integrity broken</em> and fails the <em>History intact</em> check in every pack.</li>
+<li>Any saved pack can be <a href="#altered-or-missing-history">re-checked against Jira</a> to catch deleted issues and altered records.</li>
+<li>Every change to the app's settings is logged with who made it and the old and new values. Each entry is chained to the previous one with SHA-256, so an edited, removed or reordered entry shows up as <em>Integrity broken</em>.</li>
+<li>Every pack includes the settings changes made from the start of its period until it was built, and whether the log passed its integrity check at that moment. Auditors can see whether the rules changed during the period.</li>
 </ul>
 <h2 id="control-mapping">Control mapping</h2>
 <p>The PDF maps the checks to the frameworks you select. The mapping is guidance; the auditor decides whether the evidence is sufficient for a control.</p>

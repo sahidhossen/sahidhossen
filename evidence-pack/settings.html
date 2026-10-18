@@ -32,12 +32,15 @@
 <tr><td>Approval statuses</td><td>Moving a change into one of these counts as approval.</td></tr>
 <tr><td>Implementation statuses</td><td>Moving a change into one of these means work started. It must happen after approval, by someone else.</td></tr>
 <tr><td>Emergency label and window</td><td>Changes with this label may be approved within the window after work starts.</td></tr>
-<tr><td>Require code evidence</td><td>Adds a fourth check for a linked pull request, commit, deployment or link.</td></tr>
-<tr><td>Block self-approval</td><td>Stops an assignee from approving their own change in the panel.</td></tr>
+<tr><td>Who counts as the person who did the change</td><td>One or more of: current assignee, anyone who was ever assigned, whoever moved it into an implementation status, whoever moved it after approval, the reporter. See <a href="checks.html#who-did-the-change">Who did the change</a>.</td></tr>
+<tr><td>Require code evidence</td><td>Adds a check for a linked pull request, commit, deployment or link.</td></tr>
+<tr><td>Also count Jira Service Management approvals</td><td>Approval steps on service requests count as approvals. See <a href="checks.html#what-counts-as-approval">How the checks work</a>.</td></tr>
+<tr><td>Block self-approval</td><td>Stops the people defined above from approving their own change in the panel. "Moved it after approval" can only be known later, so it is checked in packs.</td></tr>
 <tr><td>Move ticket on approval</td><td>Moves the issue to the first approval status when approved in the panel.</td></tr>
 </tbody>
 </table>
 <h2 id="access">Access</h2>
+<p>The <em>Change log</em> at the bottom of Settings shows <em>Integrity verified</em> while every entry still matches its hash chain.</p>
 <p><em>Who can build packs</em> and <em>Who can approve changes</em> take Jira groups. Leave them empty to allow everyone. Jira admins always can.</p>
 <h2 id="schedules">Monthly packs</h2>
 <p>Add a schedule with a name, JQL and sample size. On the first day of each month, a pack for the previous calendar month is built and stored in History. <em>Run now</em> builds last month's pack immediately.</p>

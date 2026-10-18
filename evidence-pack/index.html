@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Overview | Evidence Pack for Jira</title>
+<meta name="description" content="Audit-ready change management evidence from your Jira history, for ISO 27001, SOC 2, DORA and NIS2.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="shell">
+  <aside class="side" id="side">
+    <a class="brand" href="index.html"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect x="3" y="2" width="20" height="26" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 9h10M8 13h10M8 17h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="22" cy="22" r="6.5" fill="#2f5bd3"/><path d="m19.2 22 1.9 1.9 3.8-3.8" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><b>Evidence Pack</b></a>
+    <button class="menu-toggle" aria-expanded="false" aria-controls="side" onclick="var s=document.getElementById('side');var o=s.classList.toggle('open');this.setAttribute('aria-expanded',o)">Menu</button>
+    <nav aria-label="Documentation"><h2 id="product">Product</h2><a href="index.html" aria-current="page">Overview</a><a href="getting-started.html">Getting started</a><h2 id="using-it">Using it</h2><a href="checks.html">How the checks work</a><a href="approvals.html">Approving changes</a><a href="settings.html">Settings</a><a href="faq.html">FAQ</a><h2 id="legal-and-help">Legal and help</h2><a href="support.html">Support</a><a href="privacy.html">Privacy policy</a><a href="terms.html">Terms of use</a><p class="lang"><a href="datenschutz.html">Datenschutzerklärung (Deutsch)</a></p></nav>
+  </aside>
+  <main>
+    <article class="sheet">
+
+<h1>Change evidence your auditor can check</h1>
+<p class="lede">Evidence Pack reads the history of your Jira tickets and shows, change by change, whether it was approved, approved before work started, and approved by someone other than the person who did it. Then it hands you the result as a PDF your auditor can re-check.</p>
+
+<div class="excerpt" role="img" aria-label="Example from an evidence pack: three changes, two with exceptions, and the SHA-256 fingerprint of the pack">
+  <div class="excerpt-head"><strong>Exceptions (2 of 25 tested)</strong><span>ISO/IEC 27001:2022 Annex A 8.32, Q3 2026, seed 482913</span></div>
+  <table>
+    <thead><tr><th>Key</th><th>Change</th><th>Approved first</th><th>Not self-approved</th><th>Reason</th></tr></thead>
+    <tbody>
+      <tr><td class="key">OPS-212</td><td>Rotate database credentials</td><td><span class="mark ok">✓</span></td><td><span class="mark ok">✓</span></td><td>Passed</td></tr>
+      <tr class="ex"><td class="key">OPS-219</td><td>Change firewall rules for VPN</td><td><span class="mark ok">✓</span></td><td><span class="mark no">✕</span></td><td>A. Weber approved and also implemented</td></tr>
+      <tr class="ex"><td class="key">OPS-231</td><td>Add index on orders table</td><td><span class="mark no">✕</span></td><td><span class="mark ok">✓</span></td><td>Moved to In Progress before it was approved</td></tr>
+    </tbody>
+  </table>
+  <div class="stamp"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5l-8-3Z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m8.5 12 2.4 2.4 4.6-4.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>SHA-256 <code>a3f9c2e81b7d4f60c5e2a9b13d8f7e6c4b2a1908f7e6d5c4b3a291807f6e5d4c</code></span></div>
+</div>
+
+<h2 id="what-it-replaces">What it replaces</h2>
+<p>When an auditor asks for "the full history of these 20 changes", most teams spend days on screenshots and spreadsheet exports. Evidence Pack builds the same evidence from the system of record in about a minute, picks the sample with a recorded seed so nothing looks cherry-picked, and lists every exception with its reason.</p>
+<h2 id="what-you-get">What you get</h2>
+<ul>
+<li><strong>Evidence packs.</strong> Pick changes with JQL and a period, test all of them or a random sample, and download a PDF and CSV with a SHA-256 fingerprint.</li>
+<li><strong>Approval in the ticket.</strong> Approvers approve or reject right on the Jira issue. Each decision is chained to the previous one, so later edits show up.</li>
+<li><strong>Emergency changes.</strong> Changes with an emergency label may be approved within a window after work starts, as most change policies allow.</li>
+<li><strong>Code evidence.</strong> Optionally require a linked pull request, commit, deployment or link for every change.</li>
+<li><strong>Control mapping.</strong> ISO/IEC 27001:2022 A 8.32, SOC 2 CC8.1, DORA Art. 9(4)(e) and NIS2 Art. 21(2)(e).</li>
+<li><strong>A 12-month trend.</strong> See how often changes miss the rules and what the most common causes are.</li>
+<li><strong>Monthly packs.</strong> Last month's pack is built on the first of every month and stored in the app.</li>
+</ul>
+<h2 id="where-your-data-goes">Where your data goes</h2>
+<p>Nowhere. Evidence Pack runs entirely on Atlassian's own infrastructure and stores its records inside your Atlassian site. It has no servers of its own and sends no data to any outside service. The developer has no access to your data. See the <a href="privacy.html">privacy policy</a>.</p>
+<p><a href="getting-started.html">Get started</a> or read <a href="checks.html">how the checks work</a>.</p>
+
+    </article>
+    <p class="foot">Evidence Pack is an app for Jira Cloud. Jira and Atlassian are trademarks of Atlassian. This site is not affiliated with Atlassian.</p>
+  </main>
+</div>
+</body>
+</html>

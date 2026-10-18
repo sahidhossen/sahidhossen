@@ -1,0 +1,117 @@
+:root {
+  --ink: #13233f;
+  --ink-soft: #46566f;
+  --page: #eef1f4;
+  --sheet: #ffffff;
+  --rule: #c9d1db;
+  --seal: #2f5bd3;
+  --pass: #1f7a5a;
+  --pass-bg: #e3f3ec;
+  --fail: #b4232a;
+  --fail-bg: #fbe7e8;
+  --serif: "Source Serif 4", Georgia, serif;
+  --sans: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #e4e9f1;
+    --ink-soft: #a7b3c4;
+    --page: #0f1622;
+    --sheet: #172131;
+    --rule: #2c3a4f;
+    --seal: #8aa8ff;
+    --pass: #6fd3a8;
+    --pass-bg: #163a2c;
+    --fail: #ff8a8f;
+    --fail-bg: #3d1c20;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  font: 17px/1.6 var(--sans);
+}
+a { color: var(--seal); text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--seal); outline-offset: 2px; border-radius: 2px; }
+code { font: 0.88em var(--mono); background: var(--page); padding: 1px 5px; border-radius: 3px; }
+
+.shell { display: grid; grid-template-columns: 250px minmax(0, 1fr); max-width: 1180px; margin: 0 auto; min-height: 100vh; }
+.side { padding: 32px 24px; position: sticky; top: 0; align-self: start; max-height: 100vh; overflow: auto; }
+.brand { display: flex; gap: 10px; align-items: center; text-decoration: none; color: var(--ink); margin-bottom: 28px; }
+.brand svg { flex: none; }
+.brand b { font: 600 19px/1.2 var(--serif); }
+.side nav a { display: block; padding: 5px 10px; margin: 0 -10px; color: var(--ink-soft); text-decoration: none; border-radius: 4px; font-size: 15px; }
+.side nav a:hover { color: var(--ink); background: var(--sheet); }
+.side nav a[aria-current="page"] { color: var(--ink); background: var(--sheet); font-weight: 600; }
+.side h2 { font: 600 13px/1.3 var(--sans); color: var(--ink-soft); margin: 22px 0 6px; letter-spacing: 0.01em; }
+.side .lang { margin-top: 28px; font-size: 14px; color: var(--ink-soft); }
+
+main { padding: 32px 40px 80px; }
+.sheet { background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 48px 56px; max-width: 820px; }
+.sheet > * { max-width: 68ch; }
+h1 { font: 600 38px/1.15 var(--serif); margin: 0 0 14px; letter-spacing: -0.01em; }
+h2 { font: 600 25px/1.25 var(--serif); margin: 44px 0 10px; }
+h3 { font: 600 18px/1.35 var(--sans); margin: 28px 0 6px; }
+.lede { font-size: 20px; line-height: 1.5; color: var(--ink-soft); margin: 0 0 28px; }
+p, li { margin: 0 0 12px; }
+ul, ol { padding-left: 22px; }
+hr { border: 0; border-top: 1px solid var(--rule); margin: 40px 0; }
+.note { border-left: 3px solid var(--seal); padding: 4px 0 4px 16px; color: var(--ink-soft); }
+.updated { font-size: 14px; color: var(--ink-soft); margin-bottom: 28px; }
+.foot { max-width: 820px; margin-top: 24px; font-size: 14px; color: var(--ink-soft); }
+
+table { border-collapse: collapse; width: 100%; font-size: 15px; margin: 12px 0 20px; }
+th { text-align: left; font-weight: 600; border-bottom: 2px solid var(--rule); padding: 8px 10px 6px 0; }
+td { border-bottom: 1px solid var(--rule); padding: 8px 10px 8px 0; vertical-align: top; }
+
+/* The evidence excerpt on the home page: a miniature of a real pack page */
+.excerpt { max-width: none !important; margin: 8px 0 36px; border: 1px solid var(--rule); border-radius: 4px; background: var(--sheet); box-shadow: 0 1px 0 var(--rule), 0 14px 30px -18px rgba(19, 35, 63, .35); overflow: hidden; }
+.excerpt-head { display: flex; justify-content: space-between; gap: 16px; padding: 18px 22px 12px; border-bottom: 1px solid var(--rule); flex-wrap: wrap; }
+.excerpt-head strong { font: 600 18px/1.3 var(--serif); }
+.excerpt-head span { font-size: 13px; color: var(--ink-soft); }
+.excerpt table { margin: 0; font-size: 14px; }
+.excerpt th, .excerpt td { padding: 8px 12px; }
+.excerpt th:first-child, .excerpt td:first-child { padding-left: 22px; }
+.excerpt td.key { font-weight: 600; white-space: nowrap; }
+.excerpt tr.ex td:first-child { box-shadow: inset 3px 0 0 var(--fail); }
+.mark { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; font-size: 11px; font-weight: 700; }
+.mark.ok { background: var(--pass-bg); color: var(--pass); }
+.mark.no { background: var(--fail-bg); color: var(--fail); }
+.stamp { display: flex; align-items: center; gap: 12px; padding: 12px 22px; border-top: 1px dashed var(--rule); font-size: 13px; color: var(--ink-soft); }
+.stamp svg { flex: none; }
+.stamp code { background: none; padding: 0; color: var(--ink); word-break: break-all; }
+
+.steps { counter-reset: s; list-style: none; padding: 0; }
+.steps li { counter-increment: s; position: relative; padding-left: 40px; margin-bottom: 16px; }
+.steps li::before { content: counter(s); position: absolute; left: 0; top: 1px; width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--ink); display: grid; place-items: center; font-size: 13px; font-weight: 600; }
+
+figure { margin: 20px 0 28px; max-width: none !important; }
+figure img { width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 4px; display: block; }
+figcaption { font-size: 14px; color: var(--ink-soft); margin-top: 8px; }
+
+.menu-toggle { display: none; }
+@media (max-width: 900px) {
+  .shell { grid-template-columns: 1fr; }
+  .side { position: static; max-height: none; padding: 20px 16px 0; }
+  .side nav { display: none; }
+  .side.open nav { display: block; }
+  .menu-toggle { display: inline-block; font: inherit; font-size: 15px; background: var(--sheet); color: var(--ink); border: 1px solid var(--rule); border-radius: 4px; padding: 6px 12px; }
+  .brand { margin-bottom: 12px; }
+  main { padding: 16px; }
+  .sheet { padding: 28px 20px; }
+  h1 { font-size: 30px; }
+  .excerpt { overflow-x: auto; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+.shell > *, .sheet { min-width: 0; }
+.sheet { overflow-wrap: anywhere; }
+.excerpt table, .sheet table { min-width: 0; }
+@media (max-width: 900px) {
+  .excerpt table { min-width: 560px; }
+  .sheet > table { display: block; overflow-x: auto; }
+  .excerpt-head span { width: 100%; }
+}

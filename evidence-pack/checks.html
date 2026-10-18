@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How the checks work | Evidence Pack for Jira</title>
+<meta name="description" content="Audit-ready change management evidence from your Jira history.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="shell">
+  <aside class="side" id="side">
+    <a class="brand" href="index.html"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect x="3" y="2" width="20" height="26" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 9h10M8 13h10M8 17h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="22" cy="22" r="6.5" fill="#2f5bd3"/><path d="m19.2 22 1.9 1.9 3.8-3.8" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><b>Evidence Pack</b></a>
+    <button class="menu-toggle" aria-expanded="false" aria-controls="side" onclick="var s=document.getElementById('side');var o=s.classList.toggle('open');this.setAttribute('aria-expanded',o)">Menu</button>
+    <nav aria-label="Documentation"><h2 id="product">Product</h2><a href="index.html">Overview</a><a href="getting-started.html">Getting started</a><h2 id="using-it">Using it</h2><a href="checks.html" aria-current="page">How the checks work</a><a href="approvals.html">Approving changes</a><a href="settings.html">Settings</a><a href="faq.html">FAQ</a><h2 id="legal-and-help">Legal and help</h2><a href="support.html">Support</a><a href="privacy.html">Privacy policy</a><a href="terms.html">Terms of use</a><p class="lang"><a href="datenschutz.html">Datenschutzerklärung (Deutsch)</a></p></nav>
+  </aside>
+  <main>
+    <article class="sheet">
+
+<h1>How the checks work</h1>
+<p class="lede">This page is written for auditors and compliance leads. It describes exactly how Evidence Pack selects changes and decides whether each one passed.</p>
+<h2 id="which-changes-are-in-the-population">Which changes are in the population</h2>
+<p>The population is every Jira issue that matches the JQL you enter and whose status category changed to <em>Done</em> inside the audit period. The exact query is printed on the first page of every pack, so it can be re-run independently in Jira.</p>
+<h2 id="how-the-sample-is-chosen">How the sample is chosen</h2>
+<p>The population is sorted by issue id. If you ask for a sample, Evidence Pack draws it with a seeded random generator and prints the seed in the pack. Running the same query with the same seed over the same population returns exactly the same sample, which shows the sample was not hand-picked.</p>
+<h2 id="what-counts-as-approval">What counts as approval</h2>
+<p>An admin chooses one of three definitions, and the choice is printed in the pack:</p>
+<ul>
+<li><strong>Status.</strong> The change was moved into one of the configured approval statuses. The person who moved it is the approver.</li>
+<li><strong>Evidence Pack approval.</strong> An approver clicked <em>Approve change</em> on the issue. The decision is recorded with the approver, time, note and the status at that moment.</li>
+<li><strong>Either.</strong> The earliest of the two counts.</li>
+</ul>
+<p>A later rejection in Evidence Pack revokes an earlier approval made there.</p>
+<h2 id="the-checks">The checks</h2>
+<table>
+<thead><tr><th>Check</th><th>Passes when</th></tr></thead>
+<tbody>
+<tr><td>Approval recorded</td><td>An approval exists, as defined above.</td></tr>
+<tr><td>Approved before implementation</td><td>The approval happened before the change first moved into an implementation status. For changes with the emergency label, approval may follow within the configured window (48 hours by default).</td></tr>
+<tr><td>Approver is not the implementer</td><td>The approver did not move the change into an implementation status and is not its assignee.</td></tr>
+<tr><td>Code change linked (optional)</td><td>The issue has a linked pull request, commit, deployment, or a link to one.</td></tr>
+</tbody>
+</table>
+<p>A change is an exception when any check fails. When there is no approval at all, the pack lists only that root cause, not the checks that fail as a consequence.</p>
+<h2 id="where-the-data-comes-from">Where the data comes from</h2>
+<p>All facts come from Jira's own issue history (the changelog) and from Evidence Pack's approval records. Nothing is typed in by hand, and nothing is taken from screenshots.</p>
+<h2 id="integrity">Integrity</h2>
+<ul>
+<li>Every pack carries a SHA-256 fingerprint computed from the query, the seed, the settings, and every tested change with its history and results.</li>
+<li>Every pack is stored in the app and can be re-downloaded later. The app never edits or deletes stored packs.</li>
+<li>Each approval decision is chained to the previous decision on the same issue with SHA-256. If a stored decision is changed, the issue shows <em>Integrity broken</em>.</li>
+<li>Every change to the app's settings is logged with who made it and the old and new values.</li>
+</ul>
+<h2 id="control-mapping">Control mapping</h2>
+<p>The PDF maps the checks to the frameworks you select. The mapping is guidance; the auditor decides whether the evidence is sufficient for a control.</p>
+<table>
+<thead><tr><th>Framework</th><th>Control</th></tr></thead>
+<tbody>
+<tr><td>ISO/IEC 27001:2022</td><td>Annex A 8.32, Change management</td></tr>
+<tr><td>SOC 2 (Trust Services Criteria)</td><td>CC8.1, Change management</td></tr>
+<tr><td>DORA, Regulation (EU) 2022/2554</td><td>Art. 9(4)(e), ICT change management</td></tr>
+<tr><td>NIS2, Directive (EU) 2022/2555</td><td>Art. 21(2)(e), Security in acquisition, development and maintenance</td></tr>
+</tbody>
+</table>
+<p class="note">Evidence Pack produces evidence. It does not make an organisation compliant and does not replace an auditor's judgement.</p>
+
+    </article>
+    <p class="foot">Evidence Pack is an app for Jira Cloud. Jira and Atlassian are trademarks of Atlassian. This site is not affiliated with Atlassian.</p>
+  </main>
+</div>
+</body>
+</html>

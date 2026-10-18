@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings | Evidence Pack for Jira</title>
+<meta name="description" content="Audit-ready change management evidence from your Jira history.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="shell">
+  <aside class="side" id="side">
+    <a class="brand" href="index.html"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect x="3" y="2" width="20" height="26" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 9h10M8 13h10M8 17h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="22" cy="22" r="6.5" fill="#2f5bd3"/><path d="m19.2 22 1.9 1.9 3.8-3.8" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><b>Evidence Pack</b></a>
+    <button class="menu-toggle" aria-expanded="false" aria-controls="side" onclick="var s=document.getElementById('side');var o=s.classList.toggle('open');this.setAttribute('aria-expanded',o)">Menu</button>
+    <nav aria-label="Documentation"><h2 id="product">Product</h2><a href="index.html">Overview</a><a href="getting-started.html">Getting started</a><h2 id="using-it">Using it</h2><a href="checks.html">How the checks work</a><a href="approvals.html">Approving changes</a><a href="settings.html" aria-current="page">Settings</a><a href="faq.html">FAQ</a><h2 id="legal-and-help">Legal and help</h2><a href="support.html">Support</a><a href="privacy.html">Privacy policy</a><a href="terms.html">Terms of use</a><p class="lang"><a href="datenschutz.html">Datenschutzerklärung (Deutsch)</a></p></nav>
+  </aside>
+  <main>
+    <article class="sheet">
+
+<h1>Settings</h1>
+<p class="lede">Only Jira admins can change settings. Everyone else sees them read-only. Every change is recorded in the change log at the bottom of the page.</p>
+<h2 id="frameworks">Frameworks</h2>
+<p>Choose the frameworks printed in the PDF's control mapping.</p>
+<h2 id="how-changes-are-judged">How changes are judged</h2>
+<table>
+<thead><tr><th>Setting</th><th>What it does</th></tr></thead>
+<tbody>
+<tr><td>What counts as approval</td><td>A status, an approval in the ticket panel, or either. See <a href="checks.html#what-counts-as-approval">How the checks work</a>.</td></tr>
+<tr><td>Approval statuses</td><td>Moving a change into one of these counts as approval.</td></tr>
+<tr><td>Implementation statuses</td><td>Moving a change into one of these means work started. It must happen after approval, by someone else.</td></tr>
+<tr><td>Emergency label and window</td><td>Changes with this label may be approved within the window after work starts.</td></tr>
+<tr><td>Require code evidence</td><td>Adds a fourth check for a linked pull request, commit, deployment or link.</td></tr>
+<tr><td>Block self-approval</td><td>Stops an assignee from approving their own change in the panel.</td></tr>
+<tr><td>Move ticket on approval</td><td>Moves the issue to the first approval status when approved in the panel.</td></tr>
+</tbody>
+</table>
+<h2 id="access">Access</h2>
+<p><em>Who can build packs</em> and <em>Who can approve changes</em> take Jira groups. Leave them empty to allow everyone. Jira admins always can.</p>
+<h2 id="schedules">Monthly packs</h2>
+<p>Add a schedule with a name, JQL and sample size. On the first day of each month, a pack for the previous calendar month is built and stored in History. <em>Run now</em> builds last month's pack immediately.</p>
+<h2 id="your-data">Your data</h2>
+<p><em>Export all data</em> downloads a JSON file with settings, schedules, the change log, the pack log and all approval records.</p>
+
+    </article>
+    <p class="foot">Evidence Pack is an app for Jira Cloud. Jira and Atlassian are trademarks of Atlassian. This site is not affiliated with Atlassian.</p>
+  </main>
+</div>
+</body>
+</html>

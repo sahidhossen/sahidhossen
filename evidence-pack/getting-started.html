@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Getting started | Evidence Pack for Jira</title>
+<meta name="description" content="Audit-ready change management evidence from your Jira history.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="shell">
+  <aside class="side" id="side">
+    <a class="brand" href="index.html"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect x="3" y="2" width="20" height="26" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 9h10M8 13h10M8 17h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="22" cy="22" r="6.5" fill="#2f5bd3"/><path d="m19.2 22 1.9 1.9 3.8-3.8" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><b>Evidence Pack</b></a>
+    <button class="menu-toggle" aria-expanded="false" aria-controls="side" onclick="var s=document.getElementById('side');var o=s.classList.toggle('open');this.setAttribute('aria-expanded',o)">Menu</button>
+    <nav aria-label="Documentation"><h2 id="product">Product</h2><a href="index.html">Overview</a><a href="getting-started.html" aria-current="page">Getting started</a><h2 id="using-it">Using it</h2><a href="checks.html">How the checks work</a><a href="approvals.html">Approving changes</a><a href="settings.html">Settings</a><a href="faq.html">FAQ</a><h2 id="legal-and-help">Legal and help</h2><a href="support.html">Support</a><a href="privacy.html">Privacy policy</a><a href="terms.html">Terms of use</a><p class="lang"><a href="datenschutz.html">Datenschutzerklärung (Deutsch)</a></p></nav>
+  </aside>
+  <main>
+    <article class="sheet">
+
+<h1>Getting started</h1>
+<p class="lede">You can build your first evidence pack in about five minutes. You need to be a Jira admin for the first step.</p>
+<ol class="steps">
+<li><strong>Install the app.</strong> Find Evidence Pack in the Atlassian Marketplace and install it on your Jira Cloud site. Open it from <em>Apps</em> in the Jira sidebar. The first time, click <em>Allow access</em> so it can read issue history as you.</li>
+<li><strong>Tell it what approval means for you.</strong> Go to <em>Settings</em>. Pick the status that means a change is approved (for example <em>Approved</em> or <em>CAB approved</em>) and the statuses that mean work has started (for example <em>In Progress</em> and <em>Done</em>). Pick the frameworks you report against. Save.</li>
+<li><strong>Build a pack.</strong> Go to <em>New pack</em>. Enter JQL for the changes in scope, for example <code>project = OPS AND type = Change</code>, and the audit period. Choose a random sample of 25, or test all changes. Click <em>Generate pack</em>.</li>
+<li><strong>Review the exceptions.</strong> The results show every change that failed a check, with the reason. Click a summary to see its full status history.</li>
+<li><strong>Hand it over.</strong> Download the PDF for your auditor and the CSV for your own records. Both carry the same SHA-256 fingerprint.</li>
+</ol>
+<figure><img src="assets/screens/pack.png" alt="A generated evidence pack with population, tested changes, exceptions by check, exceptions by reason and the exceptions table" loading="lazy" width="1840" height="900"><figcaption>A generated pack. Every exception lists the check that failed and why.</figcaption></figure>
+<h2 id="next-steps">Next steps</h2>
+<ul>
+<li>Turn on <a href="approvals.html">approval in the ticket</a> so approvers record decisions where the work happens.</li>
+<li>Add a monthly schedule in <a href="settings.html#schedules">Settings</a> so a pack for the previous month is ready on the first of every month.</li>
+<li>Restrict who can build packs and who can approve in <a href="settings.html#access">Settings</a>.</li>
+</ul>
+
+    </article>
+    <p class="foot">Evidence Pack is an app for Jira Cloud. Jira and Atlassian are trademarks of Atlassian. This site is not affiliated with Atlassian.</p>
+  </main>
+</div>
+</body>
+</html>

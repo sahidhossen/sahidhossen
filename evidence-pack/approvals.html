@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Approving changes | Evidence Pack for Jira</title>
+<meta name="description" content="Audit-ready change management evidence from your Jira history.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="shell">
+  <aside class="side" id="side">
+    <a class="brand" href="index.html"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect x="3" y="2" width="20" height="26" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 9h10M8 13h10M8 17h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="22" cy="22" r="6.5" fill="#2f5bd3"/><path d="m19.2 22 1.9 1.9 3.8-3.8" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><b>Evidence Pack</b></a>
+    <button class="menu-toggle" aria-expanded="false" aria-controls="side" onclick="var s=document.getElementById('side');var o=s.classList.toggle('open');this.setAttribute('aria-expanded',o)">Menu</button>
+    <nav aria-label="Documentation"><h2 id="product">Product</h2><a href="index.html">Overview</a><a href="getting-started.html">Getting started</a><h2 id="using-it">Using it</h2><a href="checks.html">How the checks work</a><a href="approvals.html" aria-current="page">Approving changes</a><a href="settings.html">Settings</a><a href="faq.html">FAQ</a><h2 id="legal-and-help">Legal and help</h2><a href="support.html">Support</a><a href="privacy.html">Privacy policy</a><a href="terms.html">Terms of use</a><p class="lang"><a href="datenschutz.html">Datenschutzerklärung (Deutsch)</a></p></nav>
+  </aside>
+  <main>
+    <article class="sheet">
+
+<h1>Approving changes in the ticket</h1>
+<p class="lede">Approvers can approve or reject a change directly on the Jira issue, so the decision is recorded where the work happens.</p>
+<h2 id="open-the-panel">Open the panel</h2>
+<p>On any issue, click the Evidence Pack icon below the title and choose <em>Change approval</em>. The panel shows whether the change is compliant, waiting for approval, or has an exception, and why.</p>
+<figure><img src="assets/screens/panel.png" alt="The Change approval panel on a Jira issue, showing each check, a note field, the approve and revoke buttons and the decision record" loading="lazy" width="760" height="900" style="max-width:420px"><figcaption>The panel on an approved issue, with its decision record.</figcaption></figure>
+<h2 id="approve-reject-or-revoke">Approve, reject or revoke</h2>
+<ul>
+<li><strong>Approve change</strong> records your approval with an optional note. If your admin turned it on, the issue also moves to the approval status.</li>
+<li><strong>Reject</strong> needs a short reason.</li>
+<li><strong>Revoke approval</strong> appears after an approval and records a rejection, which cancels the approval.</li>
+</ul>
+<p>Every decision also adds a comment to the issue, so the team sees it.</p>
+<h2 id="who-can-approve">Who can approve</h2>
+<p>By default anyone who can see the issue can approve, except its assignee. Admins can limit approval to Jira groups such as a change advisory board in <a href="settings.html#access">Settings</a>.</p>
+<h2 id="the-decision-record">The decision record</h2>
+<p>The panel lists every decision on the issue. <em>Integrity verified</em> means each decision still matches the chain of SHA-256 hashes created when it was recorded.</p>
+
+    </article>
+    <p class="foot">Evidence Pack is an app for Jira Cloud. Jira and Atlassian are trademarks of Atlassian. This site is not affiliated with Atlassian.</p>
+  </main>
+</div>
+</body>
+</html>

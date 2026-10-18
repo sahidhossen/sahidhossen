@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FAQ | Evidence Pack for Jira</title>
+<meta name="description" content="Audit-ready change management evidence from your Jira history.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600&family=Source+Serif+4:opsz,wght@8..60,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="shell">
+  <aside class="side" id="side">
+    <a class="brand" href="index.html"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect x="3" y="2" width="20" height="26" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 9h10M8 13h10M8 17h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="22" cy="22" r="6.5" fill="#2f5bd3"/><path d="m19.2 22 1.9 1.9 3.8-3.8" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><b>Evidence Pack</b></a>
+    <button class="menu-toggle" aria-expanded="false" aria-controls="side" onclick="var s=document.getElementById('side');var o=s.classList.toggle('open');this.setAttribute('aria-expanded',o)">Menu</button>
+    <nav aria-label="Documentation"><h2 id="product">Product</h2><a href="index.html">Overview</a><a href="getting-started.html">Getting started</a><h2 id="using-it">Using it</h2><a href="checks.html">How the checks work</a><a href="approvals.html">Approving changes</a><a href="settings.html">Settings</a><a href="faq.html" aria-current="page">FAQ</a><h2 id="legal-and-help">Legal and help</h2><a href="support.html">Support</a><a href="privacy.html">Privacy policy</a><a href="terms.html">Terms of use</a><p class="lang"><a href="datenschutz.html">Datenschutzerklärung (Deutsch)</a></p></nav>
+  </aside>
+  <main>
+    <article class="sheet">
+
+<h1>Frequently asked questions</h1>
+<h3>Does Evidence Pack send my data anywhere?</h3>
+<p>No. It runs on Atlassian's Forge platform, stores everything inside your Atlassian site, and makes no calls to outside services.</p>
+<h3>Can the developer see our data?</h3>
+<p>No. There is no developer-run server or database. The developer cannot access your Jira or the app's stored data.</p>
+<h3>Which Jira permissions does it ask for and why?</h3>
+<table>
+<thead><tr><th>Permission</th><th>Why</th></tr></thead>
+<tbody>
+<tr><td>Read Jira work</td><td>Read issues and their status history to build packs.</td></tr>
+<tr><td>Read Jira users</td><td>Show who approved and who implemented, and check group membership.</td></tr>
+<tr><td>Write Jira work</td><td>Add a comment and optionally move the issue when someone approves in the panel.</td></tr>
+<tr><td>App storage</td><td>Store settings, packs and approval records inside your site.</td></tr>
+</tbody>
+</table>
+<h3>Whose permissions are used to read issues?</h3>
+<p>Packs you build in the app read issues as you, so you only see what you can see in Jira. Background and monthly packs run as the app.</p>
+<h3>How large can a pack be?</h3>
+<p>Up to 2,000 changes. Packs with more than 100 changes are built in the background; you can leave the page and open the result from History.</p>
+<h3>Does it work with team-managed and company-managed projects?</h3>
+<p>Yes. It only relies on statuses and issue history, which both project types have.</p>
+<h3>Can I change a pack after it is generated?</h3>
+<p>No. Packs are stored as generated, with a SHA-256 fingerprint. To include more changes, generate a new pack.</p>
+<h3>Is Evidence Pack available in German?</h3>
+<p>Yes. The app follows each user's Jira language, and you can choose English or German for each PDF.</p>
+<h3>What happens when we uninstall?</h3>
+<p>The app's stored data is removed by Atlassian according to its Forge data retention rules. Export your data first if you need to keep it.</p>
+
+    </article>
+    <p class="foot">Evidence Pack is an app for Jira Cloud. Jira and Atlassian are trademarks of Atlassian. This site is not affiliated with Atlassian.</p>
+  </main>
+</div>
+</body>
+</html>
